@@ -1,16 +1,15 @@
 import kpfudatabase
-#требуется установленные libreoffice, qpdf
-
+#требуется установленные libreoffice, qpdf и inkscape
 
 #Параметры, которые надо поменять
-Shifr='03.03.03' # шифр направления
-NameCom='Радиофизика' # название направления
-Name='Квантовая и СВЧ электроника' # профиль
-NameShort='КиСВЧэ' # профиль сокращенное название для имен файлов и т.п.
-Kvalif='бакалавр' # квалификация выпускников
-year='2023' # год поступления
-nsem=8 # число учебных семестров (8 бакалавриат, 4 магистратура)
-namefileOP='plan.csv' # имя файла с базой данных
+Shifr='03.03.03'
+NameCom='Радиофизика'
+Name='Квантовая и СВЧ электроника'
+NameShort='КиСВЧэ'
+Kvalif='бакалавр'
+year='2022'
+nsem=8
+namefileOP='plan.csv'
 
 RPD=kpfudatabase.GetPlan(namefileOP,nsem)
 kpfudatabase.GetAuthors('authors.txt',RPD)
@@ -32,13 +31,13 @@ for irpd in range(len(RPD)):
 		kpfudatabase.changefirstpageFOS(namefileFOS, RPD[irpd]['name'], RPD[irpd]['shifr'], namefileoutFOS, year,Shifr, NameCom,Name,Kvalif, False)
 		#объединяем
 		kpfudatabase.InsertFOSOnly(namefile, namefileoutFOS, RPD[irpd]['name'], namefileout)
-	if ( RPD[irpd]['rpdstate'] == 'document for approval' or RPD[irpd]['rpdstate'] == 'error in document' or irpd==41):
+	if ( RPD[irpd]['rpdstate'] == 'document for approval' or RPD[irpd]['rpdstate'] == 'error in document'):
 		#Первая страница документа без печати, но он или на согласовании или вернули с ошибками - главное ФОС есть
 		# сначала меняем первую страницу ФОС, а то там часто и год не тот и профиль другой
 		kpfudatabase.changefirstpageFOS(namefileFOS, RPD[irpd]['name'], RPD[irpd]['shifr'], namefileoutFOS, year, Shifr, NameCom,Name,Kvalif, False)
 		# затем меняем первую страницу в РПД и включаем ФОС в РПД
 		kpfudatabase.changefirstpageRPD(namefile, namefileoutFOS, RPD[irpd]['name'], RPD[irpd]['shifr'], namefileout, year,Shifr, NameCom,Name,Kvalif)
-	if ( RPD[irpd]['rpdstate'] == 'To write' and irpd!=41):
+	if ( RPD[irpd]['rpdstate'] == 'To write'):
 		#Фоса нет просто подменяем первую страницу
 		kpfudatabase.changefirstpageRPD(namefile, '', RPD[irpd]['name'], RPD[irpd]['shifr'], namefileout, year,Shifr, NameCom,Name,Kvalif)
 

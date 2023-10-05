@@ -95,12 +95,20 @@ def GetAuthors(filename, RPD):
 			for l in ls:
 				for irpd in range(len(RPD)):
 					if(l[0]==RPD[irpd]['shifr']):
-						FIO=l[1]
-						if(len(l)>2):
-							title=l[2]
-						if(len(l)>3):
-							placeofwork=l[3]
-						RPD[irpd]['author']={'FIO':FIO, 'title':title, 'placeofwork':placeofwork}
+						authors=l[1].strip().split(';')
+						for a in authors:
+							if(a==''):
+								continue
+							a1=a.split('#')
+							FIO=a1[0]
+							if(len(a1)>1):
+								title=a1[1]
+							if(len(a1)>2):
+								placeofwork=a1[2]
+							if 'author' in RPD[irpd]:
+								RPD[irpd]['author'].append({'FIO':FIO, 'title':title, 'placeofwork':placeofwork})
+							else:
+								RPD[irpd]['author']=[{'FIO': FIO, 'title': title, 'placeofwork': placeofwork}]
 
 def GetPPS():
 	pps=[]
